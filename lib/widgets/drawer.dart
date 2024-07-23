@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'custom_text.dart';
 
 class DrawerA extends StatelessWidget {
-  final String text1, text2;
-  final Function onTap;
+  final String? text1, text2;
+  final Function? onTap;
 
-  DrawerA({Key key, this.text1, this.text2, this.onTap}) : super(key: key);
+  DrawerA({Key? key, this.text1, this.text2, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +15,17 @@ class DrawerA extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
               accountName: CustomText(
-                text: text1,
+                text: text1!,
                 size: 18,
                 weight: FontWeight.bold,
               ),
               accountEmail: CustomText(
-                text: text2,
+                text: text2!,
               )),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: CustomText(text: "Log out"),
-            onTap: onTap,
+            onTap: () => onTap,
           )
         ],
       ),

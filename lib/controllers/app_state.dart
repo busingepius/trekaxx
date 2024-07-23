@@ -53,36 +53,36 @@ class AppStateProvider extends GetxController {
   Set<Polyline> _routeToDriverpoly = {};
 
   GoogleMapsServices _googleMapsServices = GoogleMapsServices();
-  GoogleMapController _mapController;
-  static LatLng _center;
-  LatLng _lastPosition = _center;
+  GoogleMapController? _mapController;
+  static LatLng? _center;
+  LatLng? _lastPosition = _center;
   TextEditingController pickupLocationControlelr = TextEditingController();
   TextEditingController destinationController = TextEditingController();
-  Position position;
+  Position? position;
   DriverService _driverService = DriverService();
 
   //  draggable to show
   RxString show = 'DESTINATION_SELECTION'.obs;
 
   //   taxi pin
-  BitmapDescriptor carPin;
+  BitmapDescriptor? carPin;
 
   //   location pin
-  BitmapDescriptor locationPin;
+  BitmapDescriptor? locationPin;
 
-  LatLng get center => _center;
+  LatLng? get center => _center;
 
-  LatLng get lastPosition => _lastPosition;
+  LatLng? get lastPosition => _lastPosition;
 
   Set<Marker> get markers => _markers;
 
   Set<Polyline> get poly => _poly;
 
-  GoogleMapController get mapController => _mapController;
-  RouteModel routeModel;
-  DriverModel driverModel;
-  LatLng pickupCoordinates;
-  LatLng destinationCoordinates;
+  GoogleMapController? get mapController => _mapController;
+  RouteModel? routeModel;
+  DriverModel? driverModel;
+  LatLng? pickupCoordinates;
+  LatLng? destinationCoordinates;
   double ridePrice = 0;
   String notificationType = "";
 
@@ -94,36 +94,36 @@ class AppStateProvider extends GetxController {
   RideRequestServices _requestServices = RideRequestServices();
   int timeCounter = 0;
   double percentage = 0;
-  Timer periodicTimer;
-  String requestedDestination;
+  Timer? periodicTimer;
+  String? requestedDestination;
 
   String requestStatus = "";
-  double requestedDestinationLat;
+  double? requestedDestinationLat;
 
-  double requestedDestinationLng;
-  RideRequestModel rideRequestModel;
-  BuildContext mainContext;
+  double? requestedDestinationLng;
+  RideRequestModel? rideRequestModel;
+  BuildContext? mainContext;
 
 // TODO: this variable will listen to the status of the ride request
-  StreamSubscription<DocumentSnapshot> requestStream;
+  StreamSubscription<DocumentSnapshot>? requestStream;
 
   //TODO: this variable will keep track of the drivers position before and during the ride
-  StreamSubscription<QuerySnapshot> driverStream;
+  StreamSubscription<QuerySnapshot>? driverStream;
 
 //TODO:  this stream is for all the driver on the app
-  StreamSubscription<List<DriverModel>> allDriversStream;
+  StreamSubscription<List<DriverModel>>? allDriversStream;
 
   // AppStateProvider() {
-    // _saveDeviceToken();
-    // fcm.getInitialMessage().then((RemoteMessage message) {
-    //   FirebaseMessaging.onMessage.listen((RemoteMessage message) { handleOnMessage(message.data);});
-    //   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) { handleOnLaunch(message.data);});
-    //   FirebaseMessaging.onBackgroundMessage((message) => handleOnResume(message.data));
-    // });
-    // _setCustomMapPin();
-    // _getUserLocation();
-    // _listemToDrivers();
-    // Geolocator.getPositionStream().listen(_updatePosition);
+  // _saveDeviceToken();
+  // fcm.getInitialMessage().then((RemoteMessage message) {
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) { handleOnMessage(message.data);});
+  //   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) { handleOnLaunch(message.data);});
+  //   FirebaseMessaging.onBackgroundMessage((message) => handleOnResume(message.data));
+  // });
+  // _setCustomMapPin();
+  // _getUserLocation();
+  // _listemToDrivers();
+  // Geolocator.getPositionStream().listen(_updatePosition);
   // }
 
 // ANCHOR: MAPS & LOCATION METHODS
@@ -171,7 +171,7 @@ class AppStateProvider extends GetxController {
             //TODO:DELETED ITS DEPENDENCY
             List<Placemark> placemark = await placemarkFromCoordinates(
                 position.target.latitude, position.target.longitude);
-            pickupLocationControlelr.text = placemark[0].name;
+            pickupLocationControlelr.text = placemark[0].name!;
             update();
           }
         });
@@ -180,16 +180,16 @@ class AppStateProvider extends GetxController {
     }
   }
 
-  Future sendRequest({LatLng origin, LatLng destination}) async {
+  Future sendRequest({LatLng? origin, LatLng? destination}) async {
     LatLng _org;
     LatLng _dest;
 
     if (origin == null && destination == null) {
-      _org = pickupCoordinates;
-      _dest = destinationCoordinates;
+      _org = pickupCoordinates!;
+      _dest = destinationCoordinates!;
     } else {
-      _org = origin;
-      _dest = destination;
+      _org = origin!;
+      _dest = destination!;
     }
 
     RouteModel route =
@@ -198,7 +198,7 @@ class AppStateProvider extends GetxController {
 
     if (origin == null) {
       ridePrice =
-          double.parse((routeModel.distance.value * 500).toStringAsFixed(1));
+          double.parse((routeModel!.distance!.value! * 500).toStringAsFixed(1));
     }
     List<Marker> mks = _markers
         .where((element) => element.markerId.value == "location")
@@ -207,24 +207,24 @@ class AppStateProvider extends GetxController {
       _markers.remove(mks[0]);
     }
 //TODO: ! another method will be created just to draw the polys and add markers
-    _addLocationMarker(destinationCoordinates, routeModel.distance.text);
+    _addLocationMarker(destinationCoordinates!, routeModel!.distance!.text!);
     _center = destinationCoordinates;
     if (_poly != null) {
-      _createRoute(route.points, color: Colors.deepOrange);
+      _createRoute(route.points!, color: Colors.deepOrange);
     }
     _createRoute(
-      route.points,
+      route.points!,
     );
     _routeToDestinationPolys = _poly;
     update();
   }
 
-  void updateDestination({String destination}) {
-    destinationController.text = destination;
+  void updateDestination({String? destination}) {
+    destinationController.text = destination!;
     update();
   }
 
-  _createRoute(String decodeRoute, {Color color}) {
+  _createRoute(String decodeRoute, {Color? color}) {
     clearPoly();
     var uuid = new Uuid();
     String polyId = uuid.v1();
@@ -289,7 +289,7 @@ class AppStateProvider extends GetxController {
         anchor: Offset(0, 0.85),
         infoWindow:
             InfoWindow(title: destinationController.text, snippet: distance),
-        icon: locationPin));
+        icon: locationPin!));
     update();
   }
 
@@ -303,22 +303,23 @@ class AppStateProvider extends GetxController {
         anchor: Offset(0, 0.85),
         zIndex: 3,
         infoWindow: InfoWindow(title: "Pickup", snippet: "location"),
-        icon: locationPin));
+        icon: locationPin!));
     update();
   }
 
-  void _addDriverMarker({LatLng position, double rotation, String driverId}) {
+  void _addDriverMarker(
+      {LatLng? position, double? rotation, String? driverId}) {
     var uuid = new Uuid();
     String markerId = uuid.v1();
     _markers.add(Marker(
         markerId: MarkerId(markerId),
-        position: position,
-        rotation: rotation,
+        position: position!,
+        rotation: rotation!,
         draggable: false,
         zIndex: 2,
         flat: true,
         anchor: Offset(1, 1),
-        icon: carPin));
+        icon: carPin!));
   }
 
   _updateMarkers(List<DriverModel> drivers) {
@@ -335,21 +336,22 @@ class AppStateProvider extends GetxController {
     drivers.forEach((DriverModel driver) {
       _addDriverMarker(
           driverId: driver.id,
-          position: LatLng(driver.position.lat, driver.position.lng),
-          rotation: driver.position.heading);
+          position: LatLng(driver.position!.lat!, driver.position!.lng!),
+          rotation: driver.position!.heading!);
     });
   }
 
   _updateDriverMarker(Marker marker) {
     _markers.remove(marker);
     sendRequest(
-        origin: pickupCoordinates, destination: driverModel.getPosition());
+        origin: pickupCoordinates, destination: driverModel!.getPosition());
     update();
     _addDriverMarker(
-        position: driverModel.getPosition(),
-        rotation: driverModel.position.heading,
-        driverId: driverModel.id);
+        position: driverModel!.getPosition(),
+        rotation: driverModel!.position!.heading,
+        driverId: driverModel!.id);
   }
+
   //TODO: FIX WHEN THE CAR IS SHOWN
   _setCustomMapPin() async {
     carPin = await BitmapDescriptor.fromAssetImage(
@@ -367,7 +369,7 @@ class AppStateProvider extends GetxController {
   _clearDriverMarkers() {
     _markers.forEach((element) {
       String _markerId = element.markerId.value;
-      if (_markerId != driverModel.id ||
+      if (_markerId != driverModel!.id ||
           _markerId != LOCATION_MARKER_ID ||
           _markerId != PICKUP_MARKER_ID) {
         _markers.remove(element);
@@ -472,7 +474,7 @@ class AppStateProvider extends GetxController {
                               borderRadius: BorderRadius.circular(40)),
                           child: CircleAvatar(
                             radius: 45,
-                            backgroundImage: NetworkImage(driverModel?.photo),
+                            backgroundImage: NetworkImage(driverModel!.photo!),
                           ),
                         ),
                       )
@@ -486,7 +488,8 @@ class AppStateProvider extends GetxController {
                     ],
                   ),
                   SizedBox(height: 10),
-                  _stars(rating: driverModel.rating, votes: driverModel.votes),
+                  _stars(
+                      rating: driverModel!.rating, votes: driverModel!.votes),
                   Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -494,9 +497,9 @@ class AppStateProvider extends GetxController {
                       TextButton.icon(
                           onPressed: null,
                           icon: Icon(Icons.directions_car),
-                          label: Text(driverModel.car ?? "Fiat")),
+                          label: Text(driverModel!.car ?? "Fiat")),
                       CustomText(
-                        text: driverModel.plate,
+                        text: driverModel!.plate,
                         color: Colors.deepOrange,
                       )
                     ],
@@ -524,13 +527,13 @@ class AppStateProvider extends GetxController {
         });
   }
 
-  _stars({int votes, double rating}) {
+  _stars({int? votes, double? rating}) {
     if (votes == 0) {
       return StarsWidget(
         numberOfStars: 0,
       );
     } else {
-      double finalRate = rating / votes;
+      double finalRate = rating! / votes!;
       return StarsWidget(
         numberOfStars: finalRate.floor(),
       );
@@ -546,31 +549,32 @@ class AppStateProvider extends GetxController {
   //   }
   // }
 
-  changeRequestedDestination({String reqDestination, double lat, double lng}) {
+  changeRequestedDestination(
+      {String? reqDestination, double? lat, double? lng}) {
     requestedDestination = reqDestination;
     requestedDestinationLat = lat;
     requestedDestinationLng = lng;
     update();
   }
 
-  listenToRequest({String id, BuildContext context}) async {
+  listenToRequest({String? id, BuildContext? context}) async {
     requestStream =
         _requestServices.requestStream(id: id).listen((documentSnapshot) async {
       if (documentSnapshot.id == id) {
         rideRequestModel = RideRequestModel.fromSnapshot(documentSnapshot);
         update();
-        switch (documentSnapshot.data()['status']) {
+        switch (documentSnapshot['status']) {
           case CANCELLED:
-            requestStream.cancel();
+            requestStream!.cancel();
             print('STATUS FORRRRRRRRRRRRRRRRRRR NOWwwwwwwwwwwwwwwwwwww1');
             break;
           case ACCEPTED:
             print('STATUS FORRRRRRRRRRRRRRRRRRR NOWwwwwwwwwwwwwwwwwwww2');
-            if (lookingForDriver) Navigator.pop(context);
+            if (lookingForDriver) Navigator.pop(context!);
             lookingForDriver = false;
             driverModel = await _driverService
-                .getDriverById(documentSnapshot.data()['driverId']);
-            periodicTimer.cancel();
+                .getDriverById(documentSnapshot['driverId']);
+            periodicTimer!.cancel();
             clearPoly();
             _stopListeningToDriversStream();
             _listenToDriver();
@@ -581,8 +585,8 @@ class AppStateProvider extends GetxController {
             break;
           case EXPIRED:
             print('STATUS FORRRRRRRRRRRRRRRRRRR NOWwwwwwwwwwwwwwwwwwww3');
-            requestStream.cancel();
-            showRequestExpiredAlert(context);
+            requestStream!.cancel();
+            showRequestExpiredAlert(context!);
             break;
           default:
             break;
@@ -592,18 +596,18 @@ class AppStateProvider extends GetxController {
   }
 
   requestDriver(
-      {UserModel user,
-      double lat,
-      double lng,
-      BuildContext context,
-      Map distance}) {
+      {UserModel? user,
+      double? lat,
+      double? lng,
+      BuildContext? context,
+      Map? distance}) {
     alertsOnUi = true;
     update();
     var uuid = new Uuid();
     String id = uuid.v1();
     _requestServices.createRideRequest(
         id: id,
-        userId: user.id,
+        userId: user!.id,
         username: user.name,
         distance: distance,
         destination: {
@@ -616,14 +620,14 @@ class AppStateProvider extends GetxController {
           "longitude": lng
         });
     listenToRequest(id: id, context: context);
-    percentageCounter(requestId: id, context: context);
+    percentageCounter(requestId: id, context: context!);
   }
 
   cancelRequest() {
     lookingForDriver = false;
     _requestServices
-        .updateRequest({"id": rideRequestModel.id, "status": "cancelled"});
-    periodicTimer.cancel();
+        .updateRequest({"id": rideRequestModel!.id, "status": "cancelled"});
+    periodicTimer!.cancel();
     update();
   }
 
@@ -635,27 +639,27 @@ class AppStateProvider extends GetxController {
   _listenToDriver() {
     driverStream = _driverService.driverStream().listen((event) {
       event.docChanges.forEach((change) async {
-        if (change.doc.data()['id'] == driverModel.id) {
+        if (change.doc['id'] == driverModel!.id) {
           driverModel = DriverModel.fromSnapshot(change.doc);
           // code to update marker
           List<Marker> _m = _markers
-              .where((element) => element.markerId.value == driverModel.id)
+              .where((element) => element.markerId.value == driverModel!.id)
               .toList(); /*were commented out*/
           _markers.remove(_m[0]);
           clearMarkers();
           sendRequest(
               origin: pickupCoordinates,
-              destination: driverModel.getPosition());
-          if (routeModel.distance.value <= 200) {
+              destination: driverModel!.getPosition());
+          if (routeModel!.distance!.value! <= 200) {
             driverArrived = true;
           }
           update();
 
           _addDriverMarker(
-              position: driverModel.getPosition(),
-              rotation: driverModel.position.heading,
-              driverId: driverModel.id);
-          addPickupMarker(pickupCoordinates);
+              position: driverModel!.getPosition(),
+              rotation: driverModel!.position!.heading,
+              driverId: driverModel!.id);
+          addPickupMarker(pickupCoordinates!);
           // _updateDriverMarker(_m[0]);
         }
       });
@@ -667,11 +671,11 @@ class AppStateProvider extends GetxController {
 
   _stopListeningToDriversStream() {
     // _clearDriverMarkers();
-    allDriversStream.cancel();
+    allDriversStream!.cancel();
   }
 
 //TODO:  Timer counter for driver request
-  percentageCounter({String requestId, BuildContext context}) {
+  percentageCounter({String? requestId, BuildContext? context}) {
     lookingForDriver = true;
     update();
     periodicTimer = Timer.periodic(Duration(seconds: 1), (time) {
@@ -685,28 +689,28 @@ class AppStateProvider extends GetxController {
         _requestServices.updateRequest({"id": requestId, "status": "expired"});
         time.cancel();
         if (alertsOnUi) {
-          Navigator.pop(context);
+          Navigator.pop(context!);
           alertsOnUi = false;
           update();
         }
-        requestStream.cancel();
+        requestStream!.cancel();
       }
       update();
     });
   }
 
-  setPickCoordinates({LatLng coordinates}) {
+  setPickCoordinates({LatLng? coordinates}) {
     pickupCoordinates = coordinates;
     update();
   }
 
-  setDestination({LatLng coordinates}) {
+  setDestination({LatLng? coordinates}) {
     destinationCoordinates = coordinates;
     update();
   }
 
-  changePickupLocationAddress({String address}) {
-    pickupLocationControlelr.text = address;
+  changePickupLocationAddress({String? address}) {
+    pickupLocationControlelr.text = address!;
     if (pickupCoordinates != null) {
       _center = pickupCoordinates;
     }
@@ -752,10 +756,10 @@ class AppStateProvider extends GetxController {
     } else if (notificationType == TRIP_STARTED_NOTIFICATION) {
     } else if (notificationType == REQUEST_ACCEPTED_NOTIFICATION) {}
 
-    if (lookingForDriver) Navigator.pop(mainContext);
+    if (lookingForDriver) Navigator.pop(mainContext!);
     lookingForDriver = false;
     driverModel = await _driverService.getDriverById(data['data']['driverId']);
-    periodicTimer.cancel();
+    periodicTimer!.cancel();
     update();
   }
 
@@ -763,8 +767,11 @@ class AppStateProvider extends GetxController {
   Completer<GoogleMapController> mapcontroller = Completer();
 
   Stream<Position> getCurrentLocation() {
-    return Geolocator.getPositionStream(
-        desiredAccuracy: LocationAccuracy.high, distanceFilter: 10);
+    return Geolocator.getPositionStream();
+    // return Geolocator.getPositionStream(
+    //   desiredAccuracy: LocationAccuracy.high,
+    //   distanceFilter: 10,
+    // );
   }
 
 //  TODO: USE THE FOLLOWING DURING REFACTOR
@@ -861,4 +868,3 @@ class AppStateProvider extends GetxController {
 //   }
 // }
 }
-

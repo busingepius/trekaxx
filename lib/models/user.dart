@@ -10,15 +10,15 @@ class UserModel {
   static const RATING = "rating";
   static const TOKEN = "token";
 
-  String id;
-  String name;
-  String email;
-  String phone;
-  String token;
+  String? id;
+  String? name;
+  String? email;
+  String? phone;
+  String? token;
 
-  int votes;
-  int trips;
-  double rating;
+  int? votes;
+  int? trips;
+  double? rating;
 
   UserModel(
       {this.id,
@@ -31,14 +31,14 @@ class UserModel {
       this.email});
 
   UserModel.fromSnapshot(DocumentSnapshot snapshot) {
-    name = snapshot.data()[NAME];
-    email = snapshot.data()[EMAIL];
-    id = snapshot.data()[ID];
-    token = snapshot.data()[TOKEN];
+    name = snapshot[NAME];
+    email = snapshot[EMAIL];
+    id = snapshot[ID];
+    token = snapshot[TOKEN];
 
-    phone = snapshot.data()[PHONE];
-    votes = snapshot.data()[VOTES];
-    trips = snapshot.data()[TRIPS];
-    rating = snapshot.data()[RATING];
+    phone = snapshot[PHONE];
+    votes = snapshot[VOTES];
+    trips = snapshot[TRIPS];
+    rating = snapshot[RATING];
   }
 }

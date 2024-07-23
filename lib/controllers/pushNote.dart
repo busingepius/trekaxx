@@ -10,9 +10,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class PushNotifications extends GetxController {
-  FirebaseMessaging messaging;
-  int totalNotifications;
-  PushNotification notificationInfo;
+  late FirebaseMessaging messaging;
+  late int totalNotifications;
+  late PushNotification notificationInfo;
 
   void registerNotification() async {
     await Firebase.initializeApp();
@@ -36,8 +36,8 @@ class PushNotifications extends GetxController {
 
         // Parse the message received
         PushNotification notification = PushNotification(
-          title: message.notification?.title,
-          body: message.notification?.body,
+          title: message.notification!.title!,
+          body: message.notification!.body!,
           dataTitle: message.data['title'],
           dataBody: message.data['body'],
         );
@@ -53,13 +53,13 @@ class PushNotifications extends GetxController {
   // For handling notification when the app is in terminated state
   checkForInitialMessage() async {
     await Firebase.initializeApp();
-    RemoteMessage initialMessage =
+    RemoteMessage? initialMessage =
     await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
       PushNotification notification = PushNotification(
-        title: initialMessage.notification?.title,
-        body: initialMessage.notification?.body,
+        title: initialMessage.notification!.title!,
+        body: initialMessage.notification!.body!,
         dataTitle: initialMessage.data['title'],
         dataBody: initialMessage.data['body'],
       );
@@ -79,8 +79,8 @@ class PushNotifications extends GetxController {
     // but not terminated
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       PushNotification notification = PushNotification(
-        title: message.notification?.title,
-        body: message.notification?.body,
+        title: message.notification!.title!,
+        body: message.notification!.body!,
         dataTitle: message.data['title'],
         dataBody: message.data['body'],
       );

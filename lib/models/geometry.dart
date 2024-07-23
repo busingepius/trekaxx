@@ -1,7 +1,7 @@
 import 'location.dart';
 
 class Geometry {
-  final Location location;
+  final Location? location;
 
   Geometry({this.location});
 

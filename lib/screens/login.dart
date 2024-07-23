@@ -91,7 +91,7 @@ class LoginScreen extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               child: GestureDetector(
                 onTap: () async {
-                  await authProvider.signIn();
+                   authProvider.signIn();
                 },
                 child: Container(
                   decoration: BoxDecoration(

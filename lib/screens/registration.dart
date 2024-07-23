@@ -10,7 +10,7 @@ class RegistrationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider authProvider = Get.put(UserProvider());
+    UserProvider? authProvider = Get.put(UserProvider());
 
     return Scaffold(
       backgroundColor: Colors.deepOrange,
@@ -51,7 +51,7 @@ class RegistrationScreen extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.only(left: 10),
                     child: TextFormField(
-                      controller: authProvider.name,
+                      controller: authProvider!.name,
                       decoration: InputDecoration(
                           hintStyle: TextStyle(color: white),
                           border: InputBorder.none,
@@ -142,7 +142,7 @@ class RegistrationScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: GestureDetector(
                   onTap: () async {
-                    await authProvider.signUp();
+                     authProvider.signUp();
                   },
                   child: Container(
                     decoration: BoxDecoration(

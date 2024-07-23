@@ -9,13 +9,13 @@ class RideRequestModel{
  static const POSITION = "position";
  static const DESTINATION = "destination";
 
- String id;
- String username;
- String userId;
- String driverId;
- String status;
- Map position;
- Map destination;
+ String? id;
+ String? username;
+ String? userId;
+ String? driverId;
+ String? status;
+ Map? position;
+ Map? destination;
 
  // String get id => _id;
  // String get username => _username;
@@ -26,13 +26,13 @@ class RideRequestModel{
  // Map get destination => _destination;
  RideRequestModel({this.position,this.id,this.destination,this.userId,this.username,this.driverId,this.status});
  RideRequestModel.fromSnapshot(DocumentSnapshot snapshot){
-  id = snapshot.data()[ID];
-  username = snapshot.data()[USERNAME];
-  userId = snapshot.data()[USER_ID];
-  driverId = snapshot.data()[DRIVER_ID];
-  status = snapshot.data()[STATUS];
-  position = snapshot.data()[POSITION];
-  destination = snapshot.data()[DESTINATION];
+  id = snapshot[ID];
+  username = snapshot[USERNAME];
+  userId = snapshot[USER_ID];
+  driverId = snapshot[DRIVER_ID];
+  status = snapshot[STATUS];
+  position = snapshot[POSITION];
+  destination = snapshot[DESTINATION];
  }
 
 }

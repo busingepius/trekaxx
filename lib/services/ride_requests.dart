@@ -5,12 +5,12 @@ class RideRequestServices {
   String collection = "requests";
 
   void createRideRequest({
-    String id,
-    String userId,
-    String username,
-    Map<String, dynamic> destination,
-    Map<String, dynamic> position,
-    Map distance,
+    String? id,
+    String? userId,
+    String? username,
+    Map<String, dynamic>? destination,
+    Map<String, dynamic>? position,
+    Map? distance,
   }) {
     firebaseFiretore.collection(collection).doc(id).set({
       "username": username,
@@ -31,7 +31,7 @@ class RideRequestServices {
         .update(values);
   }
 
-  Stream<DocumentSnapshot> requestStream({String id}) {
+  Stream<DocumentSnapshot> requestStream({String? id}) {
     //changed return type from QuerySnapshot to DocumentSnapshot
     CollectionReference reference = FirebaseFirestore.instance.collection(collection);
     return reference.doc(id).snapshots();/*changed this from reference.snapshot*/

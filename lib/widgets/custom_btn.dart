@@ -4,14 +4,14 @@ import 'package:trekax/helpers/style.dart';
 import 'custom_text.dart';
 
 class CustomBtn extends StatelessWidget {
-  final String text;
-  final Color txtColor;
-  final Color bgColor;
-  final Color shadowColor;
-  final Function onTap;
+  final String? text;
+  final Color? txtColor;
+  final Color? bgColor;
+  final Color? shadowColor;
+  final Function? onTap;
 
   const CustomBtn(
-      {Key key,
+      {Key? key,
        this.text,
       this.txtColor,
       this.bgColor,
@@ -22,7 +22,7 @@ class CustomBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: ()=>onTap,
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
@@ -31,7 +31,7 @@ class CustomBtn extends StatelessWidget {
               BoxShadow(
                   color: shadowColor == null
                       ? Colors.grey.withOpacity(0.5)
-                      : shadowColor.withOpacity(0.5),
+                      : shadowColor!        .withOpacity(0.5),
                   offset: Offset(2, 3),
                   blurRadius: 4)
             ]),

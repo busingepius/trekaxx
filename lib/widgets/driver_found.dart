@@ -43,7 +43,7 @@ class DriverFoundWidget extends StatelessWidget {
                     Container(
                       child: appState.driverArrived == false ? CustomText(
                         text:
-                            'Your ride arrives in ${appState.routeModel.timeNeeded.text}',
+                            'Your ride arrives in ${appState.routeModel!.timeNeeded!.text}',
                         size: 12,
                         weight: FontWeight.w300,
                       ) : CustomText(
@@ -64,7 +64,7 @@ class DriverFoundWidget extends StatelessWidget {
                       child: Icon(Icons.person_outline, size: 25,),
                     ) : CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(appState.driverModel?.photo),
+                      backgroundImage: NetworkImage(appState.driverModel!.photo!),
                     ),
                   ),
                   title: Row(
@@ -73,11 +73,11 @@ class DriverFoundWidget extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: appState.driverModel.name + "\n",
+                            text: appState.driverModel!.name! + "\n",
                             style: TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.bold)),
                         TextSpan(
-                            text: appState.driverModel.car,
+                            text: appState.driverModel!.car,
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w300)),
                       ], style: TextStyle(color: black))),
@@ -87,7 +87,7 @@ class DriverFoundWidget extends StatelessWidget {
                       // color: Colors.grey.withOpacity(0.5),
                       onPressed: null,
                       child: CustomText(
-                        text: appState.driverModel.plate,
+                        text: appState.driverModel!.plate,
                         color: white,
                       )),
                   trailing: Container(
@@ -96,7 +96,7 @@ class DriverFoundWidget extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20)),
                       child: IconButton(
                         onPressed: () {
-                          _service.call(appState.driverModel.phone);
+                          _service.call(appState.driverModel!.phone!);
                         },
                         icon: Icon(Icons.call),
                       )),

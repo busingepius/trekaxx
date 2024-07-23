@@ -45,7 +45,7 @@ class DestinationSelectionWidget extends StatelessWidget {
                     onTap: () async {
                       SharedPreferences preferences =
                           await SharedPreferences.getInstance();
-                      Prediction p = await PlacesAutocomplete.show(
+                      Prediction? p = await PlacesAutocomplete.show(
                           context: context,
                           apiKey: GOOGLE_MAPS_API_KEY,
                           mode: Mode.overlay, // Mode.fullscreen
@@ -55,15 +55,15 @@ class DestinationSelectionWidget extends StatelessWidget {
                                  COUNTRY)
                           ]);
                       PlacesDetailsResponse detail =
-                          await places.getDetailsByPlaceId(p.placeId);
-                      double lat = detail.result.geometry.location.lat;
-                      double lng = detail.result.geometry.location.lng;
+                          await places.getDetailsByPlaceId(p!.placeId!);
+                      double lat = detail.result.geometry!.location.lat;
+                      double lng = detail.result.geometry!.location.lng;
                       appState.changeRequestedDestination(
-                          reqDestination: p.description, lat: lat, lng: lng);
-                      appState.updateDestination(destination: p.description);
+                          reqDestination: p.description!, lat: lat, lng: lng);
+                      appState.updateDestination(destination: p.description!);
                       LatLng coordinates = LatLng(lat, lng);
                       appState.setDestination(coordinates: coordinates);
-                      appState.addPickupMarker(appState.center);
+                      appState.addPickupMarker(appState.center!);
                       appState.show.value= 'PICKUP_SELECTION';
                       // appState.sendRequest(
                       //     destination: coordinates,origin: coordinates

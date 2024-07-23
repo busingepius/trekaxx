@@ -129,7 +129,7 @@ class MapX extends StatelessWidget {
                     size: 30,
                   ),
                   onPressed: () {
-                    scaffoldState.currentState.openDrawer();
+                    scaffoldState.currentState!.openDrawer();
                   }),
             ),
             Obx(() => Positioned(

@@ -7,7 +7,7 @@ import 'package:trekax/screens/splash.dart';
 import 'map.dart';
 
 class TransitionScreen extends StatelessWidget {
-  TransitionScreen({Key key}) : super(key: key);
+  TransitionScreen({Key? key}) : super(key: key);
   AppStateProvider geoService = Get.put( AppStateProvider());
 
 

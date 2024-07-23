@@ -18,31 +18,31 @@ class ApplicationBloc /*with ChangeNotifier*/extends GetxController {
   final markerService = MarkerService();
 
   //Variables
-  Position currentLocation;
-  RxList<PlaceSearch> searchResults;
-  StreamController<Place> selectedLocation = StreamController<Place>();
+  Position? currentLocation;
+  RxList<PlaceSearch>? searchResults;
+  StreamController<Place?> selectedLocation = StreamController<Place>();
   StreamController<LatLngBounds> bounds = StreamController<LatLngBounds>();
-  Place selectedLocationStatic;
-  String placeType;
-  List<Place> placeResults;
-  List<Marker> markers = List<Marker>();
+  Place? selectedLocationStatic;
+  String? placeType;
+  List<Place?>? placeResults;
+  List<Marker>? markers;
 
 
-  ApplicationBloc() {
-    setCurrentLocation();
-  }
+  //  ApplicationBloc() {
+  //   setCurrentLocation();
+  // }
 
 
   setCurrentLocation() async {
     currentLocation = await geoLocatorService.getCurrentLocation();
     selectedLocationStatic = Place(name: null,
       geometry: Geometry(location: Location(
-          lat: currentLocation.latitude, lng: currentLocation.longitude),),);
+          lat: currentLocation!.latitude, lng: currentLocation!.longitude),),);
     /*notifyListeners()*/update();
   }
 
   searchPlaces(String searchTerm) async {
-    searchResults.value = await placesService.getAutocomplete(searchTerm);
+    searchResults?.value = await placesService.getAutocomplete(searchTerm);
     /*notifyListeners()*/update();
   }
 
@@ -59,7 +59,7 @@ class ApplicationBloc /*with ChangeNotifier*/extends GetxController {
     selectedLocation.add(null);
     selectedLocationStatic = null;
     searchResults = null;
-    placeType = null;
+    placeType = "";
     /*notifyListeners()*/update();
   }
 
@@ -67,24 +67,24 @@ class ApplicationBloc /*with ChangeNotifier*/extends GetxController {
     if (selected) {
       placeType = value;
     } else {
-      placeType = null;
+      placeType = "";
     }
 
     if (placeType != null) {
       var places = await placesService.getPlaces(
-          selectedLocationStatic.geometry.location.lat,
-          selectedLocationStatic.geometry.location.lng, placeType);
+          selectedLocationStatic!.geometry!.location!.lat!,
+          selectedLocationStatic!.geometry!.location!.lng!, placeType!);
       markers= [];
       if (places.length > 0) {
         var newMarker = markerService.createMarkerFromPlace(places[0],false);
-        markers.add(newMarker);
+        markers!.add(newMarker);
       }
 
-      var locationMarker = markerService.createMarkerFromPlace(selectedLocationStatic,true);
-      markers.add(locationMarker);
+      var locationMarker = markerService.createMarkerFromPlace(selectedLocationStatic!,true);
+      markers!.add(locationMarker);
 
-      var _bounds = markerService.bounds(Set<Marker>.of(markers));
-      bounds.add(_bounds);
+      var _bounds = markerService.bounds(Set<Marker>.of(markers!));
+      bounds.add(_bounds!);
 
       /*notifyListeners()*/update();
     }

@@ -17,7 +17,7 @@ class UserProvider extends GetxController{
 
   // User _user;
   // UserModel _userModel;
-  Rx<User> firebaseUser;
+  Rx<User?>? firebaseUser;
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -31,12 +31,12 @@ class UserProvider extends GetxController{
   @override
   void onReady() {
     super.onReady();
-    firebaseUser = Rx<User>(auth.currentUser);
-    firebaseUser.bindStream(auth.userChanges());
-    ever(firebaseUser, _setInitialScreen);
+    firebaseUser = Rx<User>(auth!.currentUser!);
+    firebaseUser?.bindStream(auth!.userChanges());
+    ever(firebaseUser!, _setInitialScreen);
   }
 
-  _setInitialScreen(User user) async {
+  _setInitialScreen(User? user) async {
     if (user == null) {
       print('gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
       Get.offAll(() => LoginScreen());
@@ -131,7 +131,7 @@ class UserProvider extends GetxController{
   void signIn() async {
     try {
       showLoading();
-      await auth
+      await auth!
           .signInWithEmailAndPassword(
         email: email.text.trim(),
         password: password.text.trim(),
@@ -150,13 +150,13 @@ class UserProvider extends GetxController{
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       showLoading();
-      await auth
+      await auth!
           .createUserWithEmailAndPassword(
           email: email.text.trim(), password: password.text.trim())
           .then((result)async {
         // String _deviceToken = await fcm.getToken();
         userServices.value.createUser(
-          id: result.user.uid,
+          id: result.user!.uid,
           name: name.text.trim(),
           email: email.text.trim(),
           phone: phone.text.trim(),
@@ -172,7 +172,7 @@ class UserProvider extends GetxController{
 
   void signOut() async {
     try{
-      auth.signOut();
+      auth!.signOut();
     }catch(e){
       Get.snackbar("Sign Out Failed", "Try again");
     }

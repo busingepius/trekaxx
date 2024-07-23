@@ -10,6 +10,6 @@ const COUNTRY = "ug";
 //firebase
 final Future<FirebaseApp> initialization =  Firebase.initializeApp();
 FirebaseFirestore firebaseFiretore = FirebaseFirestore.instance;
-FirebaseAuth auth = FirebaseAuth.instance;
+FirebaseAuth? auth = FirebaseAuth.instance;
 FirebaseMessaging fcm = FirebaseMessaging.instance;
 GoogleMapsPlaces places = GoogleMapsPlaces(apiKey: GOOGLE_MAPS_API_KEY);

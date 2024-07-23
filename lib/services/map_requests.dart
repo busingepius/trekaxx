@@ -7,8 +7,8 @@ import 'package:trekax/models/route.dart';
 
 class GoogleMapsServices {
   Future<RouteModel> getRouteByCoordinates(LatLng l1, LatLng l2) async {
-    String url =
-        "https://maps.googleapis.com/maps/api/directions/json?origin=${l1.latitude},${l1.longitude}&destination=${l2.latitude},${l2.longitude}&key=$GOOGLE_MAPS_API_KEY";
+    Uri url =
+        "https://maps.googleapis.com/maps/api/directions/json?origin=${l1.latitude},${l1.longitude}&destination=${l2.latitude},${l2.longitude}&key=$GOOGLE_MAPS_API_KEY" as Uri;
     http.Response response = await http.get(url);
     Map values = jsonDecode(response.body);
     Map routes = values["routes"][0];

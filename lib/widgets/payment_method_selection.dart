@@ -8,7 +8,7 @@ import 'package:trekax/controllers/user.dart';
 import 'custom_text.dart';
 
 class PaymentMethodSelectionWidget extends StatelessWidget {
-  const PaymentMethodSelectionWidget({Key key}) : super(key: key);
+  const PaymentMethodSelectionWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -101,10 +101,10 @@ class PaymentMethodSelectionWidget extends StatelessWidget {
                             onPressed: () async {
                               appState.requestDriver(
                                   distance:
-                                      appState.routeModel.distance.toJson(),
+                                      appState.routeModel!.distance!.toJson(),
                                   user: userProvider.userModel.value,
-                                  lat: appState.pickupCoordinates.latitude,
-                                  lng: appState.pickupCoordinates.longitude,
+                                  lat: appState.pickupCoordinates!.latitude,
+                                  lng: appState.pickupCoordinates!.longitude,
                                   context: context);
                               appState.changeMainContext(context);
 

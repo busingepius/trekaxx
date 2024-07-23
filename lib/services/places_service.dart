@@ -9,7 +9,7 @@ class PlacesService {
 
   Future<List<PlaceSearch>> getAutocomplete(String search) async {
     var url =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$search&types=(places)&key=$key';
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$search&types=(places)&key=$key' as Uri;
     var response = await http.get(url);
     var json = convert.jsonDecode(response.body);
     var jsonResults = json['predictions'] as List;
@@ -18,7 +18,7 @@ class PlacesService {
 
   Future<Place> getPlace(String placeId) async {
     var url =
-        'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$key';
+        'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$key' as Uri;
     var response = await http.get(url);
     var json = convert.jsonDecode(response.body);
     var jsonResult = json['result'] as Map<String,dynamic>;
@@ -26,7 +26,7 @@ class PlacesService {
   }
 
   Future<List<Place>> getPlaces(double lat, double lng,String placeType) async {
-    var url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?location=$lat,$lng&type=$placeType&rankby=distance&key=$key';
+    var url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?location=$lat,$lng&type=$placeType&rankby=distance&key=$key' as Uri;
     var response = await http.get(url);
     var json = convert.jsonDecode(response.body);
     var jsonResults = json['results'] as List;
